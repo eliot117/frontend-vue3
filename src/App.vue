@@ -1,8 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <div class="container">
+    <nav class="navbar navbar bg-white navbar-expand-lg bg-body-tertiary mt-2 rounded">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active">
+            <router-link to="/">
+                Clientes
+            </router-link>
+            </a>
+            <a class="nav-link">
+              <router-link to="/articulos">
+                Articulos
+              </router-link>
+            </a>
+            <a class="nav-link">
+              <router-link to="/facturas">
+                Facturas
+              </router-link>
+            </a>
+            <a class="nav-link">
+              <router-link to="/pedidos">
+                Pedidos
+              </router-link>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
   <router-view/>
 </template>
 

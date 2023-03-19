@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "experimentalDecorators": true,
+    "target": "ES6",
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
