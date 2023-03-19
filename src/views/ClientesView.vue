@@ -37,8 +37,9 @@
                        <td>{{ client.nombre }}</td>
                        <td>{{ client.razon_social }}</td>
                        <th>
-                          <i class="bi bi-pencil-square"></i>
-                          <i class="bi bi-trash-fill"></i>
+                          <i class="bi bi-pencil-square" style="cursor: pointer;" @click="openModalEditCliente(client)"></i>
+                          &nbsp;
+                          <i class="bi bi-trash-fill" style="cursor: pointer;" @click="deleteClient(client.id)"></i>
                        </th>
                     </tr>
                   </tbody>
@@ -48,16 +49,19 @@
        </div>
     </div>
     <AgregarCliente></AgregarCliente>
+    <EditarCliente :id="id"></EditarCliente>
 </template>
   
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { Actions } from '../store/modules/Clientes/enums/StoreEnums';
 import { Modal } from "bootstrap";
 import AgregarCliente from "@/components/AgregarCliente.vue";
+import EditarCliente from "@/components/EditarCliente.vue";
 
 const store = useStore();
+const id = ref(0);
 
 const clients = computed(() => {
     return store.getters.getClients;
@@ -76,6 +80,28 @@ const openModalCliente = () => {
      }).show();
    }
 };
+
+const openModalEditCliente = async (client: { id: number; }) => {
+   id.value = client.id;
+   await store.dispatch(Actions.GET_CLIENT, {
+      id: client.id
+   });
+   const editClient = document.getElementById("EditClientModal");
+   if (editClient) {
+     new Modal(editClient, {
+        backdrop: "static",
+        keyboard: false,
+     }).show();
+   }
+};
+
+const deleteClient = async (id: number) => {
+  await store.dispatch(Actions.DELETE_CLIENT, {
+    id: id,
+  });
+
+  await loadCliente();
+}
 
 onMounted(async () => {
   await loadCliente();
