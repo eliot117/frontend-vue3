@@ -47,68 +47,62 @@
           </div>
        </div>
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
-  import { Modal } from 'bootstrap';
-  import { ref, computed, onMounted, defineProps, watch } from 'vue';
-  import { useStore } from 'vuex';
-  import { Actions } from '../store/modules/Clientes/enums/StoreEnums';
-  
-  const store = useStore();
+<script setup lang="ts">
+import { Modal } from 'bootstrap';
+import { ref, computed, defineProps, watch } from 'vue';
+import { useStore } from 'vuex';
+import { Actions } from '../store/modules/Clientes/enums/StoreEnums';
 
-  const props = defineProps({
-    id: Number,
-  });
-  
-  const formClient = ref({
-    name: "",
-    social_reason: "",
-  });
+const store = useStore();
+const props = defineProps({
+  id: Number,
+});
 
-  const setClient = computed(() => {
-    return store.getters.getCliente;
-  })
-  
-  const updateClient = async() => {
-    await store.dispatch(Actions.UPDATE_CLIENT, {
-      id: props.id,
-      nombre: formClient.value.name,
-      razon_social: formClient.value.social_reason,
-    });
-  
-    await closeModalAddClient();
-    await loadCliente();
-  };
+const formClient = ref({
+  name: "",
+  social_reason: "",
+});
 
-  const loadCliente = async () => {
-    await store.dispatch(Actions.GET_ALL_CLIENTS);
-  };
-  
-  const closeModalAddClient = () => {
-    const modalClient = document.getElementById("EditClientModal");
-    if (modalClient) {
-      return Modal.getInstance(modalClient)?.hide();
-    }
-  };
+const setClient = computed(() => {
+  return store.getters.getCliente;
+});
 
-  const searchClient = async () => {
-    console.log("ejecutando");
-    formClient.value.name = setClient.value.nombre;
-    formClient.value.social_reason = setClient.value.razon_social;
-  };
-
-  watch(setClient, () => {
-    if (Object.entries(setClient.value).length !== 0) {
-       console.log("Entrando")
-       searchClient();
-    }
+const updateClient = async() => {
+  await store.dispatch(Actions.UPDATE_CLIENT, {
+    id: props.id,
+    nombre: formClient.value.name,
+    razon_social: formClient.value.social_reason,
   });
 
-  onMounted(() => {
-  });
-  
-  </script>
-  
-  <style scoped></style>
+  await closeModalAddClient();
+  await loadCliente();
+};
+
+const loadCliente = async () => {
+  await store.dispatch(Actions.GET_ALL_CLIENTS);
+};
+
+const closeModalAddClient = () => {
+  const modalClient = document.getElementById("EditClientModal");
+  if (modalClient) {
+    return Modal.getInstance(modalClient)?.hide();
+  }
+};
+
+const searchClient = async () => {
+  formClient.value.name = setClient.value.nombre;
+  formClient.value.social_reason = setClient.value.razon_social;
+};
+
+watch(setClient, () => {
+  if (Object.entries(setClient.value).length !== 0) {
+    searchClient();
+  }
+});
+
+</script>
+
+<style scoped></style>
   

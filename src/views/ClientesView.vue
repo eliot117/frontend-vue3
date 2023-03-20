@@ -64,7 +64,7 @@ const store = useStore();
 const id = ref(0);
 
 const clients = computed(() => {
-    return store.getters.getClients;
+  return store.getters.getClients;
 });
 
 const loadCliente = async () => {

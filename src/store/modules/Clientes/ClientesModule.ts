@@ -64,7 +64,7 @@ export default class ClientesModule extends VuexModule implements Clientes {
 
    @Action
    async [Actions.DELETE_CLIENT](params: { id: number;}) {
-    return await Api.put(`clientes/${params.id}`).then((response) => {
+    return await Api.delete(`clientes/${params.id}`).then((response) => {
       Swal.fire({
         title: "El cliente se ha eliminado",
         icon: "success",
