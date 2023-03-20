@@ -15,13 +15,13 @@
               </router-link>
             </a>
             <a class="nav-link">
-              <router-link to="/facturas">
-                Facturas
+              <router-link to="/pedidos">
+                Pedidos
               </router-link>
             </a>
             <a class="nav-link">
-              <router-link to="/pedidos">
-                Pedidos
+              <router-link to="/facturas">
+                Facturas
               </router-link>
             </a>
           </div>
