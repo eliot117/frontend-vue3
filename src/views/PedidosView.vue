@@ -29,6 +29,7 @@
                        <th>Cliente</th> 
                        <th>Codigo</th>
                        <th>Fecha</th>
+                       <th>Cantidad</th>
                        <th></th>
                     </tr>
                   </thead>
@@ -38,6 +39,10 @@
                        <td>{{ order.cliente.nombre }}</td>
                        <td>{{ order.codigo }}</td>
                        <td>{{ order.fecha }}</td>
+                       <td v-if="order.pedidos_items !== undefined">
+                        {{ order.pedidos_items[0].cantidad }}
+                       </td>
+                       <td v-else></td>
                        <th>
                           <i class="bi bi-pencil-square" style="cursor: pointer;" @click="openModalEditOrders(order)"></i>
                           &nbsp;

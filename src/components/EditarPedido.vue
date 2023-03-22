@@ -3,7 +3,7 @@
        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
              <div class="modal-header">
-               <h4>Agregar Cliente</h4>
+               <h4>Actualizar Pedido</h4>
                <button
                  type="button"
                  class="btn-close"
@@ -23,6 +23,18 @@
                      </select>
                   </div>
                </div>
+
+               <div class="row mt-3">
+                  <div class="col-4">
+                     <label class="form-label">Articulo</label>
+                  </div>
+                  <div class="col-8">
+                     <select class="form-control" v-model="formClient.articulo_id">
+                        <option :value="0">Seleccione</option>
+                        <option v-for="(article, index) in articles" :key="index" :value="article.id">{{ article.nombre }} - {{ moneda(article.precio) }}</option>
+                     </select>
+                  </div>
+               </div>
   
                <div class="row mt-3">
                   <div class="col-4">
@@ -39,6 +51,15 @@
                   </div>
                   <div class="col-8">
                      <input class="form-control" type="date" v-model="formClient.date" />
+                  </div>
+               </div>
+
+               <div class="row mt-3">
+                  <div class="col-4">
+                     <label class="form-label">Cantidad</label>
+                  </div>
+                  <div class="col-8">
+                     <input class="form-control" type="number" v-model="formClient.amount" />
                   </div>
                </div>
              </div>
@@ -64,6 +85,8 @@
 <script setup lang="ts">
 import { Actions } from '@/store/modules/Pedidos/enums/StoreEnums';
 import * as Client from "@/store/modules/Clientes/enums/StoreEnums";
+import * as Article from "@/store/modules/Articulos/enums/StoreEnums";
+import { moneda } from '@/helpers/Moneda';
 import { Modal } from 'bootstrap';
 import { ref, onMounted, computed, watch, defineProps } from 'vue';
 import { useStore } from 'vuex';
@@ -74,9 +97,11 @@ const props = defineProps({
 });
 
 const formClient = ref({
+  articulo_id: 0,
   client_id: 0,
   code: "",
   date: "",
+  amount: 0,
 });
 
 const setOrder = computed(() => {
@@ -87,12 +112,18 @@ const clients = computed(() => {
   return store.getters.getClients;
 });
 
+const articles = computed(() => {
+  return store.getters.getArticles;
+});
+
 const updateOrder = async () => {
   await store.dispatch(Actions.UPDATE_ORDER, {
     id: props.id,
+    articulo_id: formClient.value.articulo_id,
     cliente_id: formClient.value.client_id,
     codigo: formClient.value.code,
     fecha: formClient.value.date,
+    cantidad: formClient.value.amount,
   });
 
   await closeModalEditOrders();
@@ -107,9 +138,11 @@ const closeModalEditOrders = () => {
 };
 
 const findOrder = () => {
+  formClient.value.articulo_id = setOrder.value.pedidos_items[0].articulo_id;
   formClient.value.client_id = setOrder.value.cliente_id;
   formClient.value.code = setOrder.value.codigo;
   formClient.value.date = setOrder.value.fecha;
+  formClient.value.amount = setOrder.value.pedidos_items[0].cantidad;
 }
 
 watch(setOrder, () => {
@@ -126,8 +159,13 @@ const loadOrders = async () => {
   await store.dispatch(Actions.GET_ALL_ORDERS);
 };
 
+const loadArticles = async () => {
+   await store.dispatch(Article.Actions.GET_ALL_ARTICLE);
+}
+
 onMounted(async () => {
-  await loadClients();  
+  await loadClients();
+  await loadArticles();
 });
 
 </script>

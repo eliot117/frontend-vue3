@@ -32,7 +32,7 @@ export default class PedidosModule extends VuexModule implements Pedidos {
    async [Actions.SAVE_ORDER](params: ParamsOrders) {
     return await Api.post("pedidos", params).then((response) => {
       Swal.fire({
-        title: "El pedido se ha guardado correctamente",
+        title: "El pedido se ha guardado correctamente.",
         icon: "success",
       });
     }).catch((error) => {
